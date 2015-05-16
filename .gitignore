@@ -1,0 +1,9 @@
+.DS_Store
+.bower-cache
+.bower-registry
+.idea
+node_modules
+vendor
+build
+dump.rdb
+npm-debug.log
