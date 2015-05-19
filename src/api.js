@@ -1,7 +1,5 @@
 import _ from 'lodash'
 import {underscored} from 'underscore.string'
-import Card from './Card'
-import CardSet from './CardSet'
 
 import allSets from '../lib/cards.json'
 
