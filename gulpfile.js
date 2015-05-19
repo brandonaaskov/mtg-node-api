@@ -17,23 +17,22 @@ var _ = require('underscore'),
 
 _.mixin(underscoreString.exports())
 
-// TODO no longer used (just requiring mtgjson now)
-//gulp.task('combineAllSets', function () {
-//  var dirPath = './node_modules/mtgjson/json/'
-//
-//  fs.readdir(dirPath, function (err, files) {
-//
-//    var allSets = {}
-//
-//    _.each(files, function (filename) {
-//      var fileContents = fs.readFileSync(dirPath + filename, {encoding: 'utf8'})
-//      var release = JSON.parse(fileContents)
-//      allSets[_.underscored(release.name)] = release
-//    })
-//
-//    fs.writeFile('./lib/cards.json', JSON.stringify(allSets))
-//  })
-//})
+gulp.task('combineAllSets', function () {
+  var dirPath = './node_modules/mtgjson/json/'
+
+  fs.readdir(dirPath, function (err, files) {
+
+    var allSets = {}
+
+    _.each(files, function (filename) {
+      var fileContents = fs.readFileSync(dirPath + filename, {encoding: 'utf8'})
+      var release = JSON.parse(fileContents)
+      allSets[_.underscored(release.name)] = release
+    })
+
+    fs.writeFile('./lib/cards.json', JSON.stringify(allSets))
+  })
+})
 
 gulp.task('compileScripts', function () {
   gulp.src(paths.scripts)

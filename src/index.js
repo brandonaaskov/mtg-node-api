@@ -8,8 +8,8 @@ _.mixin(underscoreString.exports())
 let api = new Api()
 let app = express()
 
-app.get('/', (req, res) => {
-  var json = api.getRelease('Khans of Tarkir')
+app.get('/set/name/:name/', (req, res) => {
+  var json = api.getRelease(req.params.name)
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(json))
 })

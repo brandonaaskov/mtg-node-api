@@ -1,16 +1,15 @@
-import mtgjson from 'mtgjson'
 import _ from 'underscore'
 import Card from './Card'
 import CardSet from './CardSet'
 
-let allSets = null
+import allSets from '../lib/cards.json'
+
+//let allSets = null
 
 class Api {
-  constructor () {
-    mtgjson((err, data) => {
-      allSets = data
-    })
-  }
+  //constructor () {
+  //  console.log('allsets', allSets)
+  //}
 
   get releaseNames () {
     return _.pluck(allSets, 'name')
