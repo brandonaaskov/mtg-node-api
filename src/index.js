@@ -1,4 +1,4 @@
-import _ from 'underscore'
+import _ from 'lodash'
 import underscoreString from 'underscore.string'
 import express from 'express'
 import Api from './Api'
