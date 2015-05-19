@@ -4,8 +4,6 @@ var _ = require('lodash'),
     pkg = require('./package.json'),
     gulp = require('gulp'),
     plumber = require('gulp-plumber'),
-    uglify = require('gulp-uglify'),
-    rename = require('gulp-rename'),
     babel = require('gulp-babel'),
     paths = {
       scripts: ['src/**/*.js'],
@@ -35,13 +33,6 @@ gulp.task('compileScripts', function () {
   gulp.src(paths.scripts)
     .pipe(plumber())
     .pipe(babel())
-    .pipe(gulp.dest(buildLocation))
-})
-
-gulp.task('compressScripts', function () {
-  gulp.src(paths.concatenatedScripts)
-    .pipe(uglify())
-    .pipe(rename(pkg.name + '.min.js'))
     .pipe(gulp.dest(buildLocation))
 })
 
