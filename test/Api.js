@@ -10,26 +10,62 @@ describe('Api', () => {
     expect(api).not.to.include.keys('returnError')
   })
 
-  it('gets release names with ease', () => {
-    expect(api.releaseNames).not.to.be.empty
+  describe('Release (aka set) Related Methods', () => {
+    it('gets all release names', () => {
+      expect(api.releaseNames).not.to.be.empty
+    })
+
+    it('gets release by name', () => {
+      let setName = 'Khans of Tarkir'
+      let collection = api.getReleaseByName(setName)
+
+      expect(collection.cards).not.to.be.empty
+      expect(collection.name).to.equal(setName)
+
+      setName = 'dragons of tarkir' //lowercased
+      collection = api.getReleaseByName(setName)
+
+      expect(collection).not.to.be.empty
+      expect(collection.name).to.equal('Dragons of Tarkir')
+    })
+
+    it('returns an error for an invalid set name', () => {
+      let json = api.getReleaseByName('bacon')
+      expect(json).to.include.keys('error')
+    })
+    
+    it('retrieves releases by block', () => {
+      let json = api.getReleasesByBlock('standard')
+      expect(json).to.not.be.empty
+    })
   })
 
-  it('retrieves a set by name', () => {
-    var setName = 'Khans of Tarkir'
-    var cards = api.getRelease(setName)
+  describe('Card Related Methods', () => {
+    describe('by rarity', () => {
+      it('gets cards by rarity', () => {
+        let json = api.getCardsByRarity('mythic')
+        expect(json).not.to.be.empty
+      })
 
-    expect(cards).not.to.be.empty
-    expect(cards.name).to.equal(setName)
+      it('handles the mythic casing scenario', () => {
+        let json = api.getCardsByRarity('mythic rare')
+        expect(json).not.to.be.empty
+      })
+    })
 
-    setName = 'dragons of tarkir' //lowercased
-    cards = api.getRelease(setName)
+    describe('by name', () => {
+      it('gets cards by name', () => {
+        let json = api.getCardsByName('abzan charm')
+        expect(_.compact(json)).not.to.be.empty
+      })
 
-    expect(cards).not.to.be.empty
-    expect(cards.name).to.equal('Dragons of Tarkir')
-  })
+      it('adds the release name to all cards', () => {
+        let json = api.getCardsByName('gravedigger')
+        expect(_.compact(json)).not.to.be.empty
 
-  it('returns an error for an invalid set name', () => {
-    var json = api.getRelease('bacon')
-    expect(json).to.include.keys('error')
+        let releaseNames = _.pluck(json, 'releaseName')
+        expect(json.length).to.equal(releaseNames.length)
+      })
+    })
   })
 })
