@@ -12,6 +12,8 @@ let respond = (res, json) => {
   res.end(JSON.stringify(_.compact(json)))
 }
 
+
+// -------------------------------- card-related routes
 app.get('/cards/name/:name', (req, res) => {
   var json = api.getCardsByName(req.params.name)
   respond(res, json)
@@ -32,6 +34,24 @@ app.get('/cards/rarity/:rarity', (req, res) => {
   respond(res, json)
 })
 
+app.get('/cards/cmc/:cost', (req, res) => {
+  var json = api.getCardsByCMC(req.params.cost)
+  respond(res, json)
+})
+
+app.get('/cards/type/:type', (req, res) => {
+  var json = api.getCardsByType(req.params.type)
+  respond(res, json)
+})
+
+app.get('/cards/banned/:format', (req, res) => {
+  var json = api.getBannedCardsByFormat(req.params.format)
+  respond(res, json)
+})
+// --------------------------------
+
+
+// -------------------------------- release-related routes
 app.get('/releases/names', (req, res) => {
   var json = api.releaseNames
   respond(res, json)
@@ -43,9 +63,10 @@ app.get('/releases/name/:name/', (req, res) => {
 })
 
 app.get('/releases/block/:block/', (req, res) => {
-  var json = api.getReleasesByBlock(req.params.block)
+  var json = api.getReleasesByFormat(req.params.block)
   respond(res, json)
 })
+// --------------------------------
 
 app.listen(3000)
 

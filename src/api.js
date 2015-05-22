@@ -5,11 +5,14 @@ import mtgjson from '../lib/cards.json'
 
 class Api {
   constructor () {
-    this.collections = _.map(mtgjson, (release) => {
+    let collections = _.map(mtgjson, (release) => {
       return new CardCollection(release)
     })
+
+    this.collections = collections
   }
 
+  // -------------------------------- internal stuff
   error (message) {
     return {
       error: {
@@ -17,11 +20,25 @@ class Api {
       }
     }
   }
+  // --------------------------------
 
+
+  // -------------------------------- getters/setters
   get releaseNames () {
     return _.pluck(this.collections, 'name')
   }
 
+  get collections () {
+    return this._collections
+  }
+
+  set collections (cardCollections) {
+    this._collections = cardCollections
+  }
+  // --------------------------------
+
+
+  // -------------------------------- release-related methods
   getReleaseByName (releaseName) {
     var release = _.find(this.collections, (collection) => {
       if (underscored(collection.name) === underscored(releaseName)) return collection
@@ -34,11 +51,26 @@ class Api {
     return release
   }
 
+  getReleasesByFormat (block) {
+    let releases = []
+
+    _.each(this.collections, (collection) => {
+      if (collection.isFormatLegal(block)) {
+        releases.push(collection)
+      }
+    })
+
+    return _.pluck(releases, 'name')
+  }
+  // --------------------------------
+
+
+  // -------------------------------- card-related methods
   getCardsByName (cardName) {
     let cards = []
 
     _.each(this.collections, (collection) => {
-      cards.push(collection.getCardsByName(cardName))
+      cards = cards.concat(collection.getCardsByName(cardName))
     })
 
     if (_.isEmpty(cards)) {
@@ -79,18 +111,6 @@ class Api {
     return cards
   }
 
-  getReleasesByBlock (block) {
-    let releases = []
-
-    _.each(this.collections, (collection) => {
-      if (collection.isBlockLegal(block)) {
-        releases.push(collection)
-      }
-    })
-
-    return _.pluck(releases, 'name')
-  }
-
   getCardsByCMC (cmc) {
     let cards = []
 
@@ -100,6 +120,27 @@ class Api {
 
     return cards
   }
+
+  getCardsByType (type) {
+    let cards = []
+
+    _.each(this.collections, (collection) => {
+      cards = cards.concat(collection.getCardsByType(type))
+    })
+
+    return cards
+  }
+
+  getBannedCardsByFormat (format) {
+    let cards = []
+
+    _.each(this.collections, (collection) => {
+      cards = cards.concat(collection.getBannedCardsByFormat(format))
+    })
+
+    return cards
+  }
+  // --------------------------------
 }
 
 export default Api

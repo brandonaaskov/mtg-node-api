@@ -14,6 +14,11 @@ class CardCollection {
     })
   }
 
+  finalizeCards (cards) {
+    let finalized = _.compact(cards)
+    return finalized
+  }
+
   getCardsByColor (color, monocolor) {
     let cards = []
 
@@ -27,33 +32,62 @@ class CardCollection {
       }
     })
 
-    return cards
+    return this.finalizeCards(cards)
   }
 
   getCardsByName (cardName) {
-    let cards = []
-
-    _.find(this.cards, (card) => {
+    let cards = _.map(this.cards, (card) => {
       if (underscored(card.name) === underscored(cardName)) {
-        cards.push(card)
+        return card
       }
     })
 
-    return cards
+    return this.finalizeCards(cards)
   }
 
   getCardsByCMC (cmc) {
-    return _.filter(this.cards, {cmc: cmc})
+    let cards = _.filter(this.cards, {cmc: cmc})
+
+    return this.finalizeCards(cards)
   }
 
-  isBlockLegal (block) {
+  getCardsByType (type) {
+    let cards = _.filter(this.cards, function (card) {
+      if (!_.has(card, 'types') && !_.isEmpty(card.types)) {
+        return this.false
+      }
+
+      if (_.indexOf(card.types, titleize(type)) !== -1) {
+        return true
+      }
+    })
+
+    return this.finalizeCards(cards)
+  }
+
+  getBannedCardsByFormat (format) {
+    let cards = []
+
+    _.find(this.cards, (card) => {
+      if (_.has(card, 'legalities')) {
+        let legality = _.get(card.legalities, titleize(format))
+        if (legality && legality.toLowerCase() === 'banned') {
+          cards.push(card)
+        }
+      }
+    })
+
+    return this.finalizeCards(cards)
+  }
+
+  isFormatLegal (format) {
     let cards = []
     let cardsInSet = this.cards.length
 
     _.find(this.cards, (card) => {
       if (_.has(card, 'legalities')) {
-        let isLegal = _.get(card.legalities, titleize(block))
-        if (isLegal) {
+        let legality = _.get(card.legalities, titleize(format))
+        if (legality && legality.toLowerCase() === 'legal') {
           cards.push(card)
         }
       }
