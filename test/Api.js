@@ -34,8 +34,8 @@ describe('Api', () => {
       expect(json).to.include.keys('error')
     })
     
-    it('retrieves releases by block', () => {
-      let json = api.getReleasesByBlock('standard')
+    it('retrieves releases by format', () => {
+      let json = api.getReleasesByFormat('standard')
       expect(json).to.not.be.empty
     })
   })
@@ -43,49 +43,86 @@ describe('Api', () => {
   describe('Card Related Methods', () => {
     describe('by rarity', () => {
       it('gets cards by rarity', () => {
-        let json = api.getCardsByRarity('mythic')
-        expect(json).not.to.be.empty
+        let cards = api.getCardsByRarity('mythic')
+        let names = _.compact(_.pluck(cards, 'name'))
+        expect(cards.length).to.equal(names.length)
       })
 
       it('handles the mythic casing scenario', () => {
-        let json = api.getCardsByRarity('mythic rare')
-        expect(json).not.to.be.empty
+        let cards = api.getCardsByRarity('mythic rare')
+        let names = _.compact(_.pluck(cards, 'name'))
+        expect(cards.length).to.equal(names.length)
       })
     })
 
     describe('by name', () => {
       it('gets cards by name', () => {
-        let json = api.getCardsByName('abzan charm')
-        expect(_.compact(json)).not.to.be.empty
+        let cards = api.getCardsByName('abzan charm')
+        let names = _.compact(_.pluck(cards, 'name'))
+        expect(cards.length).to.equal(names.length)
       })
 
       it('adds the release name to all cards', () => {
-        let json = api.getCardsByName('gravedigger')
-        expect(_.compact(json)).not.to.be.empty
+        let cards = api.getCardsByName('gravedigger')
+        let names = _.compact(_.pluck(cards, 'name'))
+        expect(cards.length).to.equal(names.length)
 
-        let releaseNames = _.pluck(json, 'releaseName')
-        expect(json.length).to.equal(releaseNames.length)
+        let releaseNames = _.compact(_.pluck(cards, 'releaseName'))
+        expect(cards.length).to.equal(releaseNames.length)
       })
     })
 
     describe('by color', () => {
       it('gets cards by color', () => {
-        let json = api.getCardsByColor('black')
-        expect(json).not.to.be.empty
+        let cards = api.getCardsByColor('black')
+        let names = _.compact(_.pluck(cards, 'name'))
+        expect(cards.length).to.equal(names.length)
       })
 
       it('gets cards by monocolor', () => {
-        let json = api.getCardsByMonoColor('black')
-        _.each(json, (card) => {
+        let cards = api.getCardsByMonoColor('black')
+        _.each(cards, (card) => {
           expect(card.colors.length).to.equal(1)
         })
+
+        let names = _.compact(_.pluck(cards, 'name'))
+        expect(cards.length).to.equal(names.length)
       })
     })
 
     describe('by cost', () => {
       it('gets cards by converted mana cost', function () {
-        let json = api.getCardsByCMC(7)
-        expect(json).not.to.be.empty
+        let cards = api.getCardsByCMC(7)
+        let names = _.compact(_.pluck(cards, 'name'))
+        expect(cards.length).to.equal(names.length)
+      })
+    })
+
+    describe('by type', () => {
+      var types = [
+        'instant',
+        'sorcery',
+        'artifact',
+        'creature',
+        'enchantment',
+        'land',
+        'planeswalker'
+      ]
+
+      _.each(types, function (type) {
+        it('gets '+ type +' cards', function () {
+          let cards = api.getCardsByType(type)
+          let names = _.compact(_.pluck(cards, 'name'))
+          expect(cards.length).to.equal(names.length)
+        })
+      })
+    })
+
+    describe('gets banned cards:', () => {
+      it('by format', function () {
+        let cards = api.getBannedCardsByFormat('legacy')
+        let names = _.compact(_.pluck(cards, 'name'))
+        expect(cards.length).to.equal(names.length)
       })
     })
   })
