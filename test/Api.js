@@ -81,5 +81,12 @@ describe('Api', () => {
         })
       })
     })
+
+    describe('by cost', () => {
+      it('gets cards by converted mana cost', function () {
+        let json = api.getCardsByCMC(7)
+        expect(json).not.to.be.empty
+      })
+    })
   })
 })
