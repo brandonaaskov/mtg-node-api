@@ -38,7 +38,7 @@ class Api {
     let cards = []
 
     _.each(this.collections, (collection) => {
-      cards.push(collection.getCardByName(cardName))
+      cards.push(collection.getCardsByName(cardName))
     })
 
     if (_.isEmpty(cards)) {
@@ -91,7 +91,15 @@ class Api {
     return _.pluck(releases, 'name')
   }
 
-  getCardsByFormat () {}
+  getCardsByCMC (cmc) {
+    let cards = []
+
+    _.each(this.collections, (collection) => {
+      cards = cards.concat(collection.getCardsByCMC(cmc))
+    })
+
+    return cards
+  }
 }
 
 export default Api

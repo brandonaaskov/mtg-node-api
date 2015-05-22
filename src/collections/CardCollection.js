@@ -30,7 +30,7 @@ class CardCollection {
     return cards
   }
 
-  getCardByName (cardName) {
+  getCardsByName (cardName) {
     let cards = []
 
     _.find(this.cards, (card) => {
@@ -40,6 +40,10 @@ class CardCollection {
     })
 
     return cards
+  }
+
+  getCardsByCMC (cmc) {
+    return _.filter(this.cards, {cmc: cmc})
   }
 
   isBlockLegal (block) {
