@@ -67,5 +67,19 @@ describe('Api', () => {
         expect(json.length).to.equal(releaseNames.length)
       })
     })
+
+    describe('by color', () => {
+      it('gets cards by color', () => {
+        let json = api.getCardsByColor('black')
+        expect(json).not.to.be.empty
+      })
+
+      it('gets cards by monocolor', () => {
+        let json = api.getCardsByMonoColor('black')
+        _.each(json, (card) => {
+          expect(card.colors.length).to.equal(1)
+        })
+      })
+    })
   })
 })

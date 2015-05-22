@@ -1,8 +1,8 @@
 import _ from 'lodash'
 
 class Card {
-  constructor (card, release) {
-    if (!release) {
+  constructor (card, releaseName) {
+    if (!releaseName) {
       throw new Error("You must provide the release object when creating a Card")
     }
 
@@ -11,7 +11,7 @@ class Card {
       this[prop] = card[prop]
     }
 
-    this.releaseName = release.name
+    this.releaseName = releaseName
 
     delete this.originalType
     delete this.multiverseid
