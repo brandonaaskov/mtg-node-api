@@ -1,4 +1,4 @@
-# mtg-node-api
+# mtg-node-api (work in progress)
 
 This is a web api built on top of node.js and [mtgjson](https://github.com/Sembiance/mtgjson) (huge thanks to @Sembiance for keeping that shiz up to date). All of the source and tests are [written in es6](https://github.com/lukehoban/es6features). If you're daunted by setting up your environment for es6, don't be: the dev instructions are dead simple.
 
