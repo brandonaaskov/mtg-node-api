@@ -1,10 +1,7 @@
 import _ from 'lodash'
 import CardCollection from './collections/CardCollection'
 import {underscored, titleize} from 'underscore.string'
-
 import mtgjson from '../lib/cards.json'
-
-let internal = Symbol()
 
 class Api {
   constructor () {
@@ -51,20 +48,16 @@ class Api {
     return cards
   }
 
+  getCardsByMonoColor (color) {
+    return this.getCardsByColor(color, true)
+  }
+
   getCardsByColor (color, monocolor) {
-    color = capitalize(color)
+    color = titleize(color)
     let cards = []
 
     _.each(this.collections, (collection) => {
-      _.each(collection.cards, (card) => {
-        let colors = card.colors || []
-        if (monocolor && colors.length > 1) {
-          cards.push(card, collection)
-        }
-        else if(!monocolor && _.indexOf(colors, color) !== -1) {
-          cards.push(card, collection)
-        }
-      })
+      cards = cards.concat(collection.getCardsByColor(color, monocolor))
     })
 
     return cards
