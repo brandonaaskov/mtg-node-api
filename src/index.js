@@ -23,7 +23,7 @@ app.get('/cards/color/:color', (req, res) => {
 })
 
 app.get('/cards/monocolor/:color', (req, res) => {
-  var json = api.getCardsByColor(req.params.color, true)
+  var json = api.getCardsByMonoColor(req.params.color)
   respond(res, json)
 })
 

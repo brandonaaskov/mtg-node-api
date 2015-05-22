@@ -14,6 +14,22 @@ class CardCollection {
     })
   }
 
+  getCardsByColor (color, monocolor) {
+    let cards = []
+
+    _.find(this.cards, (card) => {
+      let colors = card.colors || []
+      if (monocolor && colors.length === 1) {
+        cards.push(card)
+      }
+      else if(!monocolor && _.indexOf(colors, color) !== -1) {
+        cards.push(card)
+      }
+    })
+
+    return cards
+  }
+
   getCardByName (cardName) {
     let cards = []
 
