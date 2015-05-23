@@ -122,9 +122,17 @@ class Api {
   getBannedCardsByFormat (format) {
     let cards = []
 
-    _.each(this.collections, (collection) => {
-      cards = cards.concat(collection.getBannedCardsByFormat(format))
-    })
+    _.reduce(this.collections, (total, collection) => {
+      return total.concat(collection.getBannedCardsByFormat(format))
+    }, [])
+
+    return cards
+  }
+
+  getCardsByFormat (format) {
+    let cards = _.reduce(this.collections, (total, collection) => {
+      return total.concat(collection.getCardsByFormat(format))
+    }, [])
 
     return cards
   }

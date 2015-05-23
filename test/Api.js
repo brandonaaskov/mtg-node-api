@@ -6,10 +6,6 @@ let expect = chai.expect
 let api = new Api()
 
 describe('Api', () => {
-  it('cannot call a private method', () => {
-    expect(api).not.to.include.keys('returnError')
-  })
-
   describe('Release (aka set) Related Methods', () => {
     it('gets all release names', () => {
       expect(api.releaseNames).not.to.be.empty
@@ -118,12 +114,18 @@ describe('Api', () => {
       })
     })
 
-    describe('gets banned cards:', () => {
+    describe('gets banned cards', () => {
       it('by format', function () {
         let cards = api.getBannedCardsByFormat('legacy')
         let names = _.compact(_.pluck(cards, 'name'))
         expect(cards.length).to.equal(names.length)
       })
+    })
+
+    describe('by format', () => {
+      let cards = api.getCardsByFormat('standard')
+      let names = _.chain(cards).pluck('name').compact().value()
+      expect(names).to.not.be.empty
     })
   })
 })

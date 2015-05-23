@@ -89,18 +89,24 @@ class CardCollection {
     return this.finalizeCards(cards)
   }
 
-  isFormatLegal (format) {
-    let cards = []
-    let cardsInSet = this.cards.length
-
-    _.find(this.cards, (card) => {
+  getCardsByFormat (format) {
+    let cards = _.reduce(this.cards, (total, card) => {
       if (_.has(card, 'legalities')) {
-        let legality = _.get(card.legalities, titleize(format))
-        if (legality && legality.toLowerCase() === 'legal') {
-          cards.push(card)
+        let legal = _.get(card.legalities, titleize(format)) === 'Legal'
+        if (legal) {
+          total.push(card)
         }
       }
-    })
+
+      return total
+    }, [])
+
+    return this.finalizeCards(cards)
+  }
+
+  isFormatLegal (format) {
+    let cards = this.getCardsByFormat(format)
+    let cardsInSet = this.cards.length
 
     return (cards.length === cardsInSet) ? true : false
   }

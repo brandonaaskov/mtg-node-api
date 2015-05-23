@@ -44,6 +44,11 @@ app.get('/cards/type/:type', (req, res) => {
   respond(res, json)
 })
 
+app.get('/cards/format/:format', (req, res) => {
+  var json = api.getCardsByFormat(req.params.format)
+  respond(res, json)
+})
+
 app.get('/cards/banned/:format', (req, res) => {
   var json = api.getBannedCardsByFormat(req.params.format)
   respond(res, json)
@@ -62,8 +67,8 @@ app.get('/releases/name/:name/', (req, res) => {
   respond(res, json)
 })
 
-app.get('/releases/block/:block/', (req, res) => {
-  var json = api.getReleasesByFormat(req.params.block)
+app.get('/releases/format/:format/', (req, res) => {
+  var json = api.getReleasesByFormat(req.params.format)
   respond(res, json)
 })
 // --------------------------------
