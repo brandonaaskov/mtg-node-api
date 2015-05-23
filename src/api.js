@@ -5,11 +5,9 @@ import mtgjson from '../lib/cards.json'
 
 class Api {
   constructor () {
-    let collections = _.map(mtgjson, (release) => {
+    this._collections = _.map(mtgjson, (release) => {
       return new CardCollection(release)
     })
-
-    this.collections = collections
   }
 
   // -------------------------------- internal stuff
@@ -31,10 +29,6 @@ class Api {
   get collections () {
     return this._collections
   }
-
-  set collections (cardCollections) {
-    this._collections = cardCollections
-  }
   // --------------------------------
 
 
@@ -51,13 +45,9 @@ class Api {
     return release
   }
 
-  getReleasesByFormat (block) {
-    let releases = []
-
-    _.each(this.collections, (collection) => {
-      if (collection.isFormatLegal(block)) {
-        releases.push(collection)
-      }
+  getReleasesByFormat (format) {
+    let releases = _.filter(this.collections, (collection) => {
+      return collection.isFormatLegal(format)
     })
 
     return _.pluck(releases, 'name')
@@ -67,11 +57,9 @@ class Api {
 
   // -------------------------------- card-related methods
   getCardsByName (cardName) {
-    let cards = []
-
-    _.each(this.collections, (collection) => {
-      cards = cards.concat(collection.getCardsByName(cardName))
-    })
+    let cards = _.reduce(this.collections, (total, collection) => {
+      return total.concat(collection.getCardsByName(cardName))
+    }, [])
 
     if (_.isEmpty(cards)) {
       return this.error('no cards found by name: ' + cardName)
@@ -122,11 +110,11 @@ class Api {
   }
 
   getCardsByType (type) {
-    let cards = []
+    let cards = _.reduce(this.collections, (total, collection) => {
+      return total.concat(collection.getCardsByType(type))
+    }, [])
 
-    _.each(this.collections, (collection) => {
-      cards = cards.concat(collection.getCardsByType(type))
-    })
+    //console.log('cards', _.pluck(cards, 'name'))
 
     return cards
   }
