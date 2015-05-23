@@ -15,8 +15,17 @@ class CardCollection {
   }
 
   finalizeCards (cards) {
-    let finalized = _.compact(cards)
-    return finalized
+    let compact = _.compact(cards)
+    let landless = this.removeBasicLands(compact)
+    return landless
+  }
+
+  removeBasicLands (cards) {
+    let landless = _.reject(cards, function (card) {
+      return _.isEqual(card.type, 'Land')
+    })
+
+    return landless
   }
 
   getCardsByColor (color, monocolor) {
@@ -36,12 +45,12 @@ class CardCollection {
   }
 
   getCardsByName (cardName) {
-    let cards = _.map(this.cards, (card) => {
+    let cards = _.reduce(this.cards, (total, card) => {
       if (underscored(card.name) === underscored(cardName)) {
-        return card
+        total.push(card)
       }
-    })
-
+      return total
+    }, [])
     return this.finalizeCards(cards)
   }
 

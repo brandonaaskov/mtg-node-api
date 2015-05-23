@@ -35,8 +35,8 @@ describe('Api', () => {
     })
     
     it('retrieves releases by format', () => {
-      let json = api.getReleasesByFormat('standard')
-      expect(json).to.not.be.empty
+      let releases = api.getReleasesByFormat('standard')
+      expect(releases).to.not.be.above(5) //magic number, but whatever
     })
   })
 
@@ -57,17 +57,17 @@ describe('Api', () => {
 
     describe('by name', () => {
       it('gets cards by name', () => {
-        let cards = api.getCardsByName('abzan charm')
-        let names = _.compact(_.pluck(cards, 'name'))
+        let cards = api.getCardsByName('raise the alarm')
+        let names = _.pluck(cards, 'name')
         expect(cards.length).to.equal(names.length)
       })
 
       it('adds the release name to all cards', () => {
         let cards = api.getCardsByName('gravedigger')
-        let names = _.compact(_.pluck(cards, 'name'))
+        let names = _.pluck(cards, 'name')
         expect(cards.length).to.equal(names.length)
 
-        let releaseNames = _.compact(_.pluck(cards, 'releaseName'))
+        let releaseNames = _.pluck(cards, 'releaseName')
         expect(cards.length).to.equal(releaseNames.length)
       })
     })
